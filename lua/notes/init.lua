@@ -1,5 +1,3 @@
-print("hello from notes")
-
 local previous_position = {}
 
 local M = {}
