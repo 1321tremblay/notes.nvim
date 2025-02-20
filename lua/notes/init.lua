@@ -6,10 +6,6 @@ function M.setup(opts) end
 
 function M.OpenNotes()
 	local oil_ok, oil = pcall(require, "oil")
-	if not oil_ok then
-		print("Oil.nvim is not installed!")
-		return
-	end
 
 	local current_buf = vim.api.nvim_get_current_buf()
 	local current_win = vim.api.nvim_get_current_win()
@@ -33,10 +29,6 @@ end
 
 function M.CloseNotes()
 	local oil_ok, oil = pcall(require, "oil")
-	if not oil_ok then
-		print("Oil.nvim is not installed!")
-		return
-	end
 
 	local current_working_dir = vim.fn.getcwd()
 
