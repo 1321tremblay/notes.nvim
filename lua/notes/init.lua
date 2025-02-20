@@ -87,7 +87,7 @@ end
 vim.api.nvim_create_user_command("OpenNotes", "lua require('notes').OpenNotes()", {})
 vim.api.nvim_create_user_command("CloseNotes", "lua require('notes').CloseNotes()", {})
 
-vim.api.nvim_create_user_command("SaveNotes", "lua require('notes').SearchNotes()", {})
+vim.api.nvim_create_user_command("SaveNotes", "lua require('notes').SaveNotes()", {})
 vim.api.nvim_create_user_command("SearchNotes", "lua require('notes').SearchNotes()", {})
 
 return M
