@@ -65,6 +65,7 @@ function M.SaveNotes()
 	local result = handle:read("*a")
 	handle:close()
 	result = (result == "true\n")
+	print("test")
 	print(type(result))
 	print(result)
 end
