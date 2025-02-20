@@ -60,6 +60,13 @@ function M.SearchNotes()
 	end
 end
 
+function M.SaveNotes()
+	local handle = io.popen("git rev-parse --is-inside-work-tree 2>&1")
+	local result = handle:read("*a")
+	handle:close()
+	print(result)
+end
+
 vim.api.nvim_create_user_command("OpenNotes", "lua require('notes').OpenNotes()", {})
 vim.api.nvim_create_user_command("CloseNotes", "lua require('notes').CloseNotes()", {})
 
