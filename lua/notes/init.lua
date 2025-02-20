@@ -65,14 +65,29 @@ function M.SaveNotes()
 	local result = handle:read("*a")
 	handle:close()
 	result = (result == "true\n")
-	print("test")
-	print(type(result))
-	print(result)
+
+	local function commit()
+		vim.cmd("silent !git add -A")
+		local commit_msg = os.date("%Y/%M/%D %H:%M:%S")
+		vim.cmd("silent !git commit -m '" .. commit_msg .. "' ")
+	end
+
+	local function init()
+		vim.cmd("silent !git init")
+		commit()
+	end
+
+	if result == true then
+		commit()
+	else
+		init()
+	end
 end
 
 vim.api.nvim_create_user_command("OpenNotes", "lua require('notes').OpenNotes()", {})
 vim.api.nvim_create_user_command("CloseNotes", "lua require('notes').CloseNotes()", {})
 
+vim.api.nvim_create_user_command("SaveNotes", "lua require('notes').SearchNotes()", {})
 vim.api.nvim_create_user_command("SearchNotes", "lua require('notes').SearchNotes()", {})
 
 return M
