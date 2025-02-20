@@ -23,7 +23,12 @@ function M.OpenNotes()
 
 	local notes_dir = vim.fn.expand("$HOME/personal/notes")
 	print("Open Notes")
-	oil.open(notes_dir)
+	if oil_ok then
+		oil.open(notes_dir)
+	else
+		vim.cmd("Ex " .. notes_dir)
+		return
+	end
 end
 
 function M.CloseNotes()
@@ -37,7 +42,13 @@ function M.CloseNotes()
 
 	if not previous_position.buf then
 		print("No previous position saved!")
-		oil.open(current_working_dir)
+
+		if oil_ok then
+			oil.open(current_working_dir)
+		else
+			vim.cmd("Ex " .. current_working_dir)
+		end
+
 		return
 	end
 
