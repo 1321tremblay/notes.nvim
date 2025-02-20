@@ -67,13 +67,13 @@ function M.SaveNotes()
 	result = (result == "true\n")
 
 	local function commit()
-		vim.cmd("silent !git add -A")
+		os.execute("git add -A")
 		local commit_msg = os.date("%Y/%M/%D %H:%M:%S")
-		vim.cmd("silent !git commit -m '" .. commit_msg .. "' ")
+		os.execute("git commit -m '" .. commit_msg .. "' ")
 	end
 
 	local function init()
-		vim.cmd("silent !git init")
+		os.execute("git init")
 		commit()
 	end
 
