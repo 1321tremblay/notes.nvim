@@ -64,6 +64,8 @@ function M.SaveNotes()
 	local handle = io.popen("git rev-parse --is-inside-work-tree 2>&1")
 	local result = handle:read("*a")
 	handle:close()
+	result = (result == "true\n")
+	print(type(result))
 	print(result)
 end
 
