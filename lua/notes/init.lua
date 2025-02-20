@@ -2,6 +2,8 @@ local previous_position = {}
 
 local M = {}
 
+function M.setup(opts) end
+
 function M.OpenNotes()
 	local oil_ok, oil = pcall(require, "oil")
 	if not oil_ok then
