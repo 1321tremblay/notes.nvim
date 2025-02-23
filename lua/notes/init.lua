@@ -2,11 +2,16 @@ local previous_position = {}
 
 local M = {}
 
-function M.setup(opts) end
+M.config = {
+	notes_dir = "$HOME/notes.nvim",
+}
+
+M.setup = function(opts)
+	M.config = vim.tbl_extend("force", M.config, opts or {})
+	-- nothing
+end
 
 function M.OpenNotes()
-	local oil_ok, oil = pcall(require, "oil")
-
 	local current_buf = vim.api.nvim_get_current_buf()
 	local current_win = vim.api.nvim_get_current_win()
 	local current_cursor = vim.api.nvim_win_get_cursor(current_win)
@@ -17,24 +22,25 @@ function M.OpenNotes()
 		cursor = current_cursor,
 	}
 
-	local notes_dir = vim.fn.expand("$HOME/personal/notes")
-	print("Open Notes")
-	if oil_ok then
-		oil.open(notes_dir)
-	else
-		vim.cmd("Ex " .. notes_dir)
-		return
+	local oil_ok, oil = pcall(require, "oil")
+	if M.config.notes_dir then
+		local notes_dir = vim.fn.expand(M.config.notes_dir)
+		print("Open Notes")
+		if oil_ok then
+			oil.open(notes_dir)
+		else
+			vim.cmd("Ex " .. notes_dir)
+			return
+		end
 	end
 end
 
 function M.CloseNotes()
-	local oil_ok, oil = pcall(require, "oil")
-
 	local current_working_dir = vim.fn.getcwd()
 
 	if not previous_position.buf then
 		print("No previous position saved!")
-
+		local oil_ok, oil = pcall(require, "oil")
 		if oil_ok then
 			oil.open(current_working_dir)
 		else
