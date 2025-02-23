@@ -7,14 +7,12 @@ M.config = {
 }
 
 function M.setup(opts)
-  -- Add debug print statements to confirm the input and output
-  print("Default config:", vim.inspect(M.config))
-  print("User opts:", vim.inspect(opts))
+  vim.api.nvim_out_write("Default config: " .. vim.inspect(M.config) .. "\n")
+  vim.api.nvim_out_write("User opts: " .. vim.inspect(opts) .. "\n")
 
   M.config = vim.tbl_extend("force", M.config, opts or {})
 
-  -- Print the merged config to check if the merge worked as expected
-  print("Final config:", vim.inspect(M.config))
+  vim.api.nvim_out_write("Final config: " .. vim.inspect(M.config) .. "\n")
 end
 
 function M.OpenNotes()
