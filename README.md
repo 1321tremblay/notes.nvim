@@ -1,6 +1,6 @@
 # notes.nvim
 
-A basic note taking pluginthat could be replace with a couple of line of configuration
+A basic note taking plugin that could be replace with a couple of line of configuration
 
 <!-- TOC -->
 
