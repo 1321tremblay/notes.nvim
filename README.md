@@ -11,13 +11,12 @@ A basic note taking plugin that could be replace with a couple of line of config
 
 ## Requirement
 
-- Optional
+- Optional 
   - [oil.nvim] (https://github.com/stevearc/oil.nvim)
   - [telescope.nvim] (https://github.com/nvim-telescope/telescope.nvim)
 
 ## Installation
 
-currently only tested on lazy.nvim
 
 ```lua
   {
