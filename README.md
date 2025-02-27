@@ -1,47 +1,92 @@
-# A Neovim Plugin Template
+# notes.nvim
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ellisonleao/nvim-plugin-template/lint-test.yml?branch=main&style=for-the-badge)
-![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
+A basic note taking pluginthat could be replace with a couple of line of configuration
 
-A template repository for Neovim plugins.
+<!-- TOC -->
 
-## Using it
+- [Requirements](#requirements)
+- [Installation](#installation)
 
-Via `gh`:
+<!-- TOC -->
+
+## Requirement
+
+- Optional
+  - [oil.nvim] (https://github.com/stevearc/oil.nvim)
+  - [telescope.nvim] (https://github.com/nvim-telescope/telescope.nvim)
+
+## Installation
+
+currently only tested on lazy.nvim
+
+```lua
+  {
+    "1321tremblay/notes.nvim",
+    dependencies = {
+      -- "https://github.com/stevearc/oil.nvim"
+      -- "https://github.com/nvim-telescope/telescope.nvim"
+    },
+
+  },
 
 ```
-$ gh repo create my-plugin -p ellisonleao/nvim-plugin-template
+
+## Quickstart
+
+Add this to your init.lua
+
+```lua
+require("notes").setup()
 ```
 
-Via github web page:
+Then use :Notes open inside a file to open the notes directory which default to $HOME/notes.nvim/.
 
-Click on `Use this template`
+You can then use :Notes close to go back where you where.
 
-![](https://docs.github.com/assets/cb-36544/images/help/repository/use-this-template-button.png)
+Use :Notes todo to open todo.md inside the notes directory.
+Upcoming features: Set up todo in a subdirectory to set daily todo and a main one.
 
-## Features and structure
+Use :Notes search to open up telescope.nvim in the notes directory
 
-- 100% Lua
-- Github actions for:
-  - running tests using [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) and [busted](https://olivinelabs.com/busted/)
-  - check for formatting errors (Stylua)
-  - vimdocs autogeneration from README.md file
-  - luarocks release (LUAROCKS_API_KEY secret configuration required)
+## Options
 
-### Plugin structure
+If using the oil.nvim file explorer it will default to your own config if you have one.
+Upcoming feature: Make a plugin scoped config possible as I learn how to override and restore user config.
+
+```lua
+  {
+    "1321tremblay/notes.nvim",
+
+    config = function()
+      require("notes").setup({
+        -- notes_dir = "path/to/notes", default to "$HOME/notes.nvim" 
+        -- file_explorer = "oil" If oil is not set this will default to netrw.
+        -- todo_file = "todo file name" default to "todo.md"
+      })
+
+      -- key mappings using plug
+      vim.keymap.set("n", "<leader>no", "<Plug>(OpenNotes)", { desc = "[N]otes [O]pen" })
+      vim.keymap.set("n", "<leader>nc", "<Plug>(CloseNotes)", { desc = "[N]otes [C]lose" })
+      vim.keymap.set("n", "<leader>nt", "<Plug>(OpenTodo)", { desc = "[N]otes [T]odo" })
+      vim.keymap.set("n", "<leader>ns", "<Plug>(SearchNotes)", { desc = "[N]otes [S]earch" })
+      
+      -- Key mappings using subcommands
+      vim.keymap.set("n", "<leader>no", function()
+        vim.cmd "Notes open"
+      end, { desc = "[N]otes [O]pen" })
+      vim.keymap.set("n", "<leader>nc", function()
+        vim.cmd "Notes close"
+      end, { desc = "[N]otes [C]lose" })
+      vim.keymap.set("n", "<leader>nt", function()
+        vim.cmd "Notes todo"
+      end, { desc = "[N]otes [T]odo" })
+      vim.keymap.set("n", "<leader>ns", function()
+        vim.cmd "Notes search"
+      end, { desc = "[N]otes [S]earch" })
+
+    end,
+  },
 
 ```
-.
-├── lua
-│   ├── notes_nvim
-│   │   └── module.lua
-│   └── notes_nvim.lua
-├── Makefile
-├── plugin
-│   └── notes_nvim.lua
-├── README.md
-├── tests
-│   ├── minimal_init.lua
-│   └── notes_nvim
-│       └── notes_nvim_spec.lua
-```
+
+
