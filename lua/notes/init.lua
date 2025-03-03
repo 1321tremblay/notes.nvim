@@ -1,4 +1,3 @@
-print("Hello from notes")
 local M = {}
 
 local state = {
