@@ -1,8 +1,11 @@
-on:
-  push:
-    branches:
-      - master
 name: docs
+
+
+on:
+  release:
+    types:
+      - created
+      - published
 
 jobs:
   docs:
