@@ -51,6 +51,8 @@ local function get_cursor_position(window)
   return vim.api.nvim_win_get_cursor(window)
 end
 
+M._get_cursor_position = get_cursor_position
+
 -- Save the current position (handles Oil and regular buffers)
 local function save_current_position()
   local buf, filetype = get_current_buf()
