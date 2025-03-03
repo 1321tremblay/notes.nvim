@@ -1,12 +1,8 @@
 local M = {}
 
 local state = {
-  previous_position = {
-    buf = 0,
-    win = 0,
-    cursor = { 0, 0 },
-  },
-  previous_position_dir = "",
+  position = {},
+  position_dir = "",
   buffer_state_counter = 0,
   note_close_counter = 0,
 }
@@ -51,8 +47,6 @@ local function get_cursor_position(window)
   return vim.api.nvim_win_get_cursor(window)
 end
 
-M._get_cursor_position = get_cursor_position
-
 -- Save the current position (handles Oil and regular buffers)
 local function save_current_position()
   local buf, filetype = get_current_buf()
@@ -78,26 +72,30 @@ local function save_current_position()
   }
 end
 
+M._save_current_position = save_current_position
+
 -- Update previous position state before opening Notes
-local function update_previous_position()
+local function update_position()
   local buf_name = vim.api.nvim_buf_get_name(0)
   if buf_name == "" or buf_name == nil then
-    state.previous_position = nil
-    state.previous_position_dir = vim.fn.getcwd()
+    state.position = nil
+    state.position_dir = vim.fn.getcwd()
   else
-    state.previous_position = save_current_position()
-    state.previous_position_dir = nil
+    state.position = save_current_position()
+    state.position_dir = nil
   end
 end
 
+M._update_position = update_position
+
 -- Restore the previous position after closing Notes
-local function return_to_position(previous_position)
-  if previous_position.is_oil then
+local function return_to_position(position)
+  if position.is_oil then
     local oil = require("oil")
-    if previous_position.oil_dir then
-      oil.open(previous_position.oil_dir)
+    if position.oil_dir then
+      oil.open(position.oil_dir)
       vim.defer_fn(function()
-        vim.api.nvim_win_set_cursor(0, previous_position.cursor)
+        vim.api.nvim_win_set_cursor(0, position.cursor)
       end, 100)
     else
       print("No oil directory saved.")
@@ -105,9 +103,9 @@ local function return_to_position(previous_position)
     return
   end
 
-  vim.api.nvim_set_current_buf(previous_position.buf)
-  vim.api.nvim_set_current_win(previous_position.win)
-  vim.api.nvim_win_set_cursor(previous_position.win, previous_position.cursor)
+  vim.api.nvim_set_current_buf(position.buf)
+  vim.api.nvim_set_current_win(position.win)
+  vim.api.nvim_win_set_cursor(position.win, previous_position.cursor)
 end
 
 -- Open Oil if configured as the file explorer
@@ -145,7 +143,7 @@ end
 -- Open Notes directory
 function M.OpenNotes()
   if state.buffer_state_counter == 0 then
-    update_previous_position()
+    update_position()
     state.buffer_state_counter = state.buffer_state_counter + 1
   end
   open_explorer(vim.fn.expand(options.notes_dir))
@@ -154,7 +152,7 @@ end
 -- Open the Todo file and append date if necessary
 function M.OpenTodo()
   if state.buffer_state_counter == 0 then
-    update_previous_position()
+    update_position()
     state.buffer_state_counter = state.buffer_state_counter + 1
   end
   vim.api.nvim_command("edit " .. vim.fn.expand(options.notes_dir) .. "/" .. options.todo_file)
@@ -164,13 +162,13 @@ end
 -- Close Notes and restore the previous position
 function M.CloseNotes()
   state.buffer_state_counter = 0
-  if state.previous_position then
-    return_to_position(state.previous_position)
-    state.previous_position = {}
-  elseif state.previous_position_dir then
-    vim.cmd("cd " .. state.previous_position_dir)
-    open_explorer(state.previous_position_dir)
-    state.previous_position_dir = ""
+  if state.position then
+    return_to_position(state.position)
+    state.position = {}
+  elseif state.position_dir then
+    vim.cmd("cd " .. state.position_dir)
+    open_explorer(state.position_dir)
+    state.position_dir = ""
   end
 end
 
