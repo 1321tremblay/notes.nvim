@@ -11,18 +11,21 @@ local defaults = {
   notes_dir = "$HOME/notes.nvim",
   todo_file = "todo.md",
   file_explorer = "",
+  fuzzy_finder = "",
 }
 
 ---@class Notes.Options
 ---@field notes_dir string: The directory where the notes are stored
 ---@field todo_file string: The file name for the todo list
 ---@field file_explorer string: The file explorer to open
+---@field fuzzy_finder string: The fuzzy finder to use to search
 
 ---@type Notes.Options
 local options = {
   notes_dir = "",
   todo_file = "",
   file_explorer = "",
+  fuzzy_finder = "",
 }
 
 ---@param opts Notes.Options
@@ -129,6 +132,7 @@ local function open_explorer(path)
   end
 end
 
+
 -- Append today's date if not already present
 local function append_date()
   local today = os.date("%Y-%m-%d")
@@ -173,6 +177,7 @@ function M.CloseNotes()
 end
 
 function M.SearchNotes()
+if options.fuzzy_finder == "picker" then
   local snacks_ok, Snacks = pcall(require, "snacks")
   if snacks_ok then
     local opts = {
@@ -182,6 +187,16 @@ function M.SearchNotes()
   else
     print("Snacks is not installed!")
   end
+  else if options.fuzzy_finder == "telescope" then 
+      local telescope_ok, telescope = pcall(require, "telescope.builtin")
+  if telescope_ok then
+    telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
+  else
+    print("Telescope is not installed!")
+  end
+  else
+    print("Fuzzy finder not set")
+    end
 end
 
 -- Auto-command to add a checklist item when opening the Todo file
