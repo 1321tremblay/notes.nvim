@@ -206,26 +206,6 @@ vim.api.nvim_create_autocmd("BufRead", {
   end,
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = options.todo_file,
-  callback = function()
-    -- Local keybinding for Enter only in todo_file
-    vim.keymap.set("n", "<CR>", function()
-      local line = vim.fn.getline(".")
-      if line:match("^- %[%s?%]") then
-        -- Toggle checklist item
-        vim.fn.setline(".", line:gsub("^- %[%s?%]", "- [x]"))
-      elseif line:match("^- %[xX]") then
-        -- Toggle checked to unchecked
-        vim.fn.setline(".", line:gsub("^- %[xX]", "- [ ]"))
-      else
-        -- Default Enter behavior
-        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<CR>", true, true, true), "n", true)
-      end
-    end, { buffer = 0 })
-  end,
-})
-
 -- Subcommands setup
 ---@class NotesCmdSubcommand
 ---@field impl fun(args: string[], opts: table) The command implementation
