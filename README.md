@@ -24,6 +24,7 @@ A basic note taking plugin that could be replace with a couple of line of config
     dependencies = {
       -- "https://github.com/stevearc/oil.nvim"
       -- "https://github.com/nvim-telescope/telescope.nvim"
+      -- "https://github.com/folke/snacks.nvim"
     },
 
   },
@@ -49,8 +50,6 @@ Use :Notes search to open up telescope.nvim in the notes directory
 
 ## Options
 
-If using the oil.nvim file explorer it will default to your own config if you have one.
-Upcoming feature: Make a plugin scoped config possible as I learn how to override and restore user config.
 
 ```lua
   {
@@ -61,6 +60,7 @@ Upcoming feature: Make a plugin scoped config possible as I learn how to overrid
         -- notes_dir = "path/to/notes", default to "$HOME/notes.nvim" 
         -- file_explorer = "oil" If oil is not set this will default to netrw.
         -- todo_file = "todo file name" default to "todo.md"
+        -- fuzzy_finder = "picker" or "telescope" if not set search feature will not be available
       })
 
       -- key mappings using plug
