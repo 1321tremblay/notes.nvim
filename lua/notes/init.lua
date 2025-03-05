@@ -132,7 +132,6 @@ local function open_explorer(path)
   end
 end
 
-
 -- Append today's date if not already present
 local function append_date()
   local today = os.date("%Y-%m-%d")
@@ -177,26 +176,26 @@ function M.CloseNotes()
 end
 
 function M.SearchNotes()
-if options.fuzzy_finder == "picker" then
-  local snacks_ok, Snacks = pcall(require, "snacks")
-  if snacks_ok then
-    local opts = {
-      cwd = vim.fn.expand(options.notes_dir),
-    }
-    Snacks.picker.files(opts)
-  else
-    print("Snacks is not installed!")
-  end
-  else if options.fuzzy_finder == "telescope" then 
-      local telescope_ok, telescope = pcall(require, "telescope.builtin")
-  if telescope_ok then
-    telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
-  else
-    print("Telescope is not installed!")
-  end
+  if options.fuzzy_finder == "picker" then
+    local snacks_ok, Snacks = pcall(require, "snacks")
+    if snacks_ok then
+      local opts = {
+        cwd = vim.fn.expand(options.notes_dir),
+      }
+      Snacks.picker.files(opts)
+    else
+      print("Snacks is not installed!")
+    end
+  elseif options.fuzzy_finder == "telescope" then
+    local telescope_ok, telescope = pcall(require, "telescope.builtin")
+    if telescope_ok then
+      telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
+    else
+      print("Telescope is not installed!")
+    end
   else
     print("Fuzzy finder not set")
-    end
+  end
 end
 
 -- Auto-command to add a checklist item when opening the Todo file
