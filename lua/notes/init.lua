@@ -172,13 +172,15 @@ function M.CloseNotes()
   end
 end
 
--- Search Notes using Telescope
 function M.SearchNotes()
-  local telescope_ok, telescope = pcall(require, "telescope.builtin")
-  if telescope_ok then
-    telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
+  local snacks_ok, Snacks = pcall(require, "snacks")
+  if snacks_ok then
+    local opts = {
+      cwd = vim.fn.expand(options.notes_dir),
+    }
+    Snacks.picker.files(opts)
   else
-    print("Telescope is not installed!")
+    print("Snacks is not installed!")
   end
 end
 
