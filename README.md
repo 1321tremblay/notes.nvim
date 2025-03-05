@@ -1,12 +1,10 @@
 # notes.nvim
 
-A basic note taking plugin that could be replace with a couple of line of configuration
-
 <!-- TOC -->
-
 - [Requirements](#requirements)
 - [Installation](#installation)
-
+- [Quickstart](#quickstart)
+- [Options](#options)
 <!-- TOC -->
 
 ## Requirement
@@ -14,6 +12,7 @@ A basic note taking plugin that could be replace with a couple of line of config
 - Optional 
   - [oil.nvim] (https://github.com/stevearc/oil.nvim)
   - [telescope.nvim] (https://github.com/nvim-telescope/telescope.nvim)
+  - [snacks.picker] (https://github.com/folke/snacks.nvim)
 
 ## Installation
 
