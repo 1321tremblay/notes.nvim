@@ -174,12 +174,7 @@ end
 
 -- Search Notes using Telescope
 function M.SearchNotes()
-  local telescope_ok, telescope = pcall(require, "telescope.builtin")
-  if telescope_ok then
-    telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
-  else
-    print("Telescope is not installed!")
-  end
+  require("Snacks").picker.files({ cwd = vim.fn.expand(options.notes_dir) })
 end
 
 -- Auto-command to add a checklist item when opening the Todo file
