@@ -138,7 +138,7 @@ local function append_date()
   local day_of_week = os.date("%A ")
   local search_result = vim.fn.search(today, "nw")
   if search_result == 0 then
-    vim.api.nvim_buf_set_lines(0, -1, -1, false, { "", "### " .. day_of_week .. today })
+    vim.api.nvim_buf_set_lines(0, -1, -1, false, { "", "## " .. day_of_week .. today })
     vim.api.nvim_command("write")
   end
 end
