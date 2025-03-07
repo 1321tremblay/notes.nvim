@@ -267,6 +267,6 @@ vim.keymap.set("n", "<Plug>(OpenNotes)", M.OpenNotes, { noremap = true })
 vim.keymap.set("n", "<Plug>(CloseNotes)", M.CloseNotes, { noremap = true })
 vim.keymap.set("n", "<Plug>(OpenTodo)", M.OpenTodo, { noremap = true })
 vim.keymap.set("n", "<Plug>(SearchNotes)", M.SearchNotes, { noremap = true })
-vim.keymap.set("n", "<Plug>(SyncNotes)", M.SyncNotes(), { noremap = true })
+vim.keymap.set("n", "<Plug>(SyncNotes)", M.SyncNotes, { noremap = true })
 
 return M
