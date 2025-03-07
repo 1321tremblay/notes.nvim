@@ -29,27 +29,23 @@ local options = {
 }
 
 ---@param opts Notes.Options
-M.setup = function(opts)
+function M.setup(opts)
   options = vim.tbl_deep_extend("force", defaults, opts or {})
 end
-
 -- Get the current buffer and its filetype
 local function get_current_buf()
   local buffer = vim.api.nvim_get_current_buf()
   local filetype = vim.bo[buffer].filetype
   return buffer, filetype
 end
-
 -- Get the current window
 local function get_current_win()
   return vim.api.nvim_get_current_win()
 end
-
 -- Get the cursor position in a window
 local function get_cursor_position(window)
   return vim.api.nvim_win_get_cursor(window)
 end
-
 -- Save the current position (handles Oil and regular buffers)
 local function save_current_position()
   local buf, filetype = get_current_buf()
@@ -66,7 +62,6 @@ local function save_current_position()
       is_oil = true,
     }
   end
-
   return {
     buf = buf,
     win = win,
@@ -198,6 +193,10 @@ function M.SearchNotes()
   end
 end
 
+function M.SyncNotes()
+  vim.cmd("!git pull origin master")
+end
+
 -- Auto-command to add a checklist item when opening the Todo file
 vim.api.nvim_create_autocmd("BufRead", {
   pattern = options.todo_file,
@@ -233,6 +232,11 @@ M.subcommand_tbl = {
       M.SearchNotes()
     end,
   },
+  sync = {
+    impl = function()
+      M.SyncNotes()
+    end,
+  },
 }
 
 -- Command handler
@@ -263,5 +267,6 @@ vim.keymap.set("n", "<Plug>(OpenNotes)", M.OpenNotes, { noremap = true })
 vim.keymap.set("n", "<Plug>(CloseNotes)", M.CloseNotes, { noremap = true })
 vim.keymap.set("n", "<Plug>(OpenTodo)", M.OpenTodo, { noremap = true })
 vim.keymap.set("n", "<Plug>(SearchNotes)", M.SearchNotes, { noremap = true })
+vim.keymap.set("n", "<Plug>(SyncNotes)", M.SyncNotes(), { noremap = true })
 
 return M
