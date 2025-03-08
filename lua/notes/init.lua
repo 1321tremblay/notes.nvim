@@ -194,7 +194,11 @@ function M.SearchNotes()
 end
 
 function M.SyncNotes()
-  vim.cmd("!git pull origin master")
+  if vim.api.getcwd() == options.notes_dir then
+    vim.cmd("!git pull origin master")
+  else
+    print("Must be inside notes directory")
+  end
 end
 
 -- Auto-command to add a checklist item when opening the Todo file
