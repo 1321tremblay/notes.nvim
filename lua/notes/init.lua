@@ -176,26 +176,28 @@ function M.SearchNotes()
     state.buffer_state_counter = state.buffer_state_counter + 1
   end
 
-  if options.fuzzy_finder == "picker" then
-    local snacks_ok, Snacks = pcall(require, "snacks")
-    if snacks_ok then
-      local opts = {
-        cwd = vim.fn.expand(options.notes_dir),
-      }
-      Snacks.picker.files(opts)
+  vim.defer_fn(function()
+    if options.fuzzy_finder == "picker" then
+      local snacks_ok, Snacks = pcall(require, "snacks")
+      if snacks_ok then
+        local opts = {
+          cwd = vim.fn.expand(options.notes_dir),
+        }
+        Snacks.picker.files(opts)
+      else
+        print("Snacks is not installed!")
+      end
+    elseif options.fuzzy_finder == "telescope" then
+      local telescope_ok, telescope = pcall(require, "telescope.builtin")
+      if telescope_ok then
+        telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
+      else
+        print("Telescope is not installed!")
+      end
     else
-      print("Snacks is not installed!")
+      print("Fuzzy finder not set")
     end
-  elseif options.fuzzy_finder == "telescope" then
-    local telescope_ok, telescope = pcall(require, "telescope.builtin")
-    if telescope_ok then
-      telescope.find_files({ cwd = vim.fn.expand(options.notes_dir) })
-    else
-      print("Telescope is not installed!")
-    end
-  else
-    print("Fuzzy finder not set")
-  end
+  end, 100)
 end
 
 function M.SyncNotes()
