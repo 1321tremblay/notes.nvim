@@ -103,7 +103,7 @@ local function return_to_position(position)
 
   vim.api.nvim_set_current_buf(position.buf)
   vim.api.nvim_set_current_win(position.win)
-  vim.api.nvim_win_set_cursor(position.win, previous_position.cursor)
+  vim.api.nvim_win_set_cursor(position.win, position.cursor)
 end
 
 -- Open Oil if configured as the file explorer
