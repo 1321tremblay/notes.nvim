@@ -171,6 +171,11 @@ function M.CloseNotes()
 end
 
 function M.SearchNotes()
+  if state.buffer_state_counter == 0 then
+    update_position()
+    state.buffer_state_counter = state.buffer_state_counter + 1
+  end
+
   if options.fuzzy_finder == "picker" then
     local snacks_ok, Snacks = pcall(require, "snacks")
     if snacks_ok then
