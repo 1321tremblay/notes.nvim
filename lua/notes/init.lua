@@ -157,6 +157,15 @@ function M.OpenTodo()
   append_date()
 end
 
+function M.Create()
+  if state.buffer_state_counter == 0 then
+    update_position()
+    state.buffer_state_counter = state.buffer_state_counter + 1
+  end
+  vim.api.nvim_command("edit " .. vim.fn.expand(options.notes_dir) .. "/" .. options.todo_file)
+  append_date()
+end
+
 -- Close Notes and restore the previous position
 function M.CloseNotes()
   state.buffer_state_counter = 0
@@ -168,6 +177,36 @@ function M.CloseNotes()
     open_explorer(state.position_dir)
     state.position_dir = ""
   end
+end
+
+function M.GrepNotes()
+  if state.buffer_state_counter == 0 then
+    update_position()
+    state.buffer_state_counter = state.buffer_state_counter + 1
+  end
+
+  vim.defer_fn(function()
+    if options.fuzzy_finder == "picker" then
+      local snacks_ok, Snacks = pcall(require, "snacks")
+      if snacks_ok then
+        local opts = {
+          cwd = vim.fn.expand(options.notes_dir),
+        }
+        Snacks.picker.grep(opts)
+      else
+        print("Snacks is not installed!")
+      end
+    elseif options.fuzzy_finder == "telescope" then
+      local telescope_ok, telescope = pcall(require, "telescope.builtin")
+      if telescope_ok then
+        telescope.live_grep({ cwd = vim.fn.expand(options.notes_dir) })
+      else
+        print("Telescope is not installed!")
+      end
+    else
+      print("Fuzzy finder not set")
+    end
+  end, 100)
 end
 
 function M.SearchNotes()
@@ -198,14 +237,6 @@ function M.SearchNotes()
       print("Fuzzy finder not set")
     end
   end, 100)
-end
-
-function M.SyncNotes()
-  if vim.api.getcwd() == options.notes_dir then
-    vim.cmd("!git pull origin master")
-  else
-    print("Must be inside notes directory")
-  end
 end
 
 -- Auto-command to add a checklist item when opening the Todo file
@@ -243,9 +274,9 @@ M.subcommand_tbl = {
       M.SearchNotes()
     end,
   },
-  sync = {
+  grep = {
     impl = function()
-      M.SyncNotes()
+      M.GrepNotes()
     end,
   },
 }
@@ -278,6 +309,6 @@ vim.keymap.set("n", "<Plug>(OpenNotes)", M.OpenNotes, { noremap = true })
 vim.keymap.set("n", "<Plug>(CloseNotes)", M.CloseNotes, { noremap = true })
 vim.keymap.set("n", "<Plug>(OpenTodo)", M.OpenTodo, { noremap = true })
 vim.keymap.set("n", "<Plug>(SearchNotes)", M.SearchNotes, { noremap = true })
-vim.keymap.set("n", "<Plug>(SyncNotes)", M.SyncNotes, { noremap = true })
+vim.keymap.set("n", "<Plug>(GrepNotes)", M.GrepNotes, { noremap = true })
 
 return M
